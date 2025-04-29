@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>VuetifyList+eng</title>
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.6.15/dist/vuetify.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  </head>
+  <body>
+
+    <div id="app">
+      <v-app>
+        <v-app-bar app color="indigo" dark>
+          <v-toolbar-title>{{ $t('appTitle') }}</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-select
+            :items="['ru', 'en']"
+            v-model="$i18n.locale"
+            dense
+            hide-details
+            outlined
+            style="max-width: 80px; margin-left: 10px;"
+          ></v-select>
+          <v-btn text to="/" tag="router-link">{{ $t('home') }}</v-btn>
+          <v-btn text to="/about" tag="router-link">{{ $t('about') }}</v-btn>
+        </v-app-bar>
+
+        <v-main>
+          <router-view></router-view>
+        </v-main>
+      </v-app>
+    </div>
+
+    <!-- Подключения библиотек -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.6.15/dist/vuetify.js"></script>
+    <script src="https://unpkg.com/vue-router@3.5.4/dist/vue-router.js"></script>
+    <script src="https://unpkg.com/vuex@3.6.2/dist/vuex.js"></script>
+    <script src="https://unpkg.com/vue-i18n@8.28.2/dist/vue-i18n.js"></script>
+
+    <script src="TaskCard.js"></script>
+    <script src="Home.js"></script>
+    <script src="About.js"></script>
+
+    <!-- Vuex store -->
+    <script>
+      const store = new Vuex.Store({
+        state: {
+          tasks: [
+            { text: 'Оплатить коммунальные услуги', done: false },
+            { text: 'Прочитать 10 страниц книги', done: false },
+            { text: 'Прогулка', done: false },
+            { text: 'Закончить отчёт по работе', done: false },
+            { text: 'Купить продукты', done: false }
+          ]
+        },
+        mutations: {
+          addTask(state, text) {
+            state.tasks.push({ text, done: false });
+          },
+          deleteTask(state, index) {
+            state.tasks.splice(index, 1);
+          }
+        }
+      });
+    </script>
+
+    <!-- Переводы -->
+    <script>
+      const messages = {
+        ru: {
+          appTitle: 'Приложение для задач',
+          home: 'Главная',
+          about: 'О приложении',
+          addTask: 'Добавить задачу',
+          add: 'Добавить',
+          taskList: 'Список дел',
+          aboutText: 'Это простое приложение для создания и управления списком дел.',
+          student: 'Тимашков Алексей, Студент ИРНИТУ.'
+        },
+        en: {
+          appTitle: 'Task Manager',
+          home: 'Home',
+          about: 'About',
+          addTask: 'Add a task',
+          add: 'Add',
+          taskList: 'To-Do List',
+          aboutText: 'This is a simple app to manage your tasks.',
+          student: 'by Aleksei Timashkov, Student of IRNITU.'
+        }
+      };
+
+      const i18n = new VueI18n({
+        locale: 'ru',
+        messages
+      });
+    </script>
+
+    <!-- Инициализация Vue -->
+    <script>
+      const routes = [
+        { path: '/', component: Home },
+        { path: '/about', component: About }
+      ];
+
+      const router = new VueRouter({ routes });
+
+      new Vue({
+        el: '#app',
+        vuetify: new Vuetify(),
+        store,
+        router,
+        i18n
+      });
+    </script>
+
+    <style>
+      .text-decoration-line-through {
+        text-decoration: line-through;
+      }
+    </style>
+  </body>
+</html>
